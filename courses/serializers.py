@@ -98,6 +98,7 @@ class CourseListSerializer(BaseCourseSerializer):
         return course
 
 
+
 class CourseDetailSerializer(BaseCourseSerializer):
     modules = CourseModuleSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
