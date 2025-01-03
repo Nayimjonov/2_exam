@@ -97,8 +97,6 @@ class CourseListSerializer(BaseCourseSerializer):
                 Lesson.objects.create(module=module, **lesson_data)
         return course
 
-
-
 class CourseDetailSerializer(BaseCourseSerializer):
     modules = CourseModuleSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
