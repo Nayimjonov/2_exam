@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializers import RegisterSerializer
 
 
+
 User = get_user_model()
 
 class UserCreateView(generics.CreateAPIView):
