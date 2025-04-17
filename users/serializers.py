@@ -1,1 +1,20 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    is_teacher = serializers.BooleanField()
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
+
+

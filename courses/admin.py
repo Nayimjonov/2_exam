@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Category, Course, Module, Lesson
 
 
-class LessonInline(admin.TabularInline):
+class LessonInline(admin.StackedInline):
     model = Lesson
     extra = 1
 
