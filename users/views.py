@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, UserSerializer
+from core.pagination import UserPagination
 
 
 
@@ -32,5 +33,6 @@ class UserLogoutView(APIView):
             }, status=400)
         return Response(status=204)
 
+class UserListView(generics.ListAPIView):
 
 
