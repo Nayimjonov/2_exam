@@ -34,5 +34,7 @@ class UserLogoutView(APIView):
         return Response(status=204)
 
 class UserListView(generics.ListAPIView):
-
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    pagination_class = UserPagination
 
