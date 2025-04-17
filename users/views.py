@@ -1,10 +1,10 @@
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from .serializers import UserSerializer
 
 
@@ -16,6 +16,7 @@ class UserCreateView(generics.CreateAPIView):
 
 
 class UserLogoutView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         refresh_token = request.data.get('refresh')
         if not refresh_token:
