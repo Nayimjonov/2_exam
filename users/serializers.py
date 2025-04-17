@@ -12,6 +12,7 @@ class UserSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     is_teacher = serializers.BooleanField()
+    date_joined = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
