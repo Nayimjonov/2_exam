@@ -7,5 +7,6 @@ urlpatterns = [
     path('categories/<int:pk>/', views.CategoryRetrieveUpdateDestroyView.as_view(), name='category-detail'),
     # courses
     path('courses/', views.CourseListCreateView.as_view(), name='course-list'),
-
+    path('courses/<int:pk>/', views.CourseRetrieveUpdateDestroyView.as_view(), name='course-detail'),
+    path('courses/category/<int:pk>/', views.CourseByCategoryView.as_view(), name='courses-by-category'),
 ]

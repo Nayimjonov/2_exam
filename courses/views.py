@@ -4,6 +4,7 @@ from .permessions import IsTeacher, IsCourseTeacherOrAdmin
 from .models import Category, Course
 from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer
 from core.pagination import CategoryPagination, CoursePagination
+from rest_framework.exceptions import NotFound
 
 # CATEGORY
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -43,12 +44,20 @@ class CourseListCreateView(generics.ListCreateAPIView):
 class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseDetailSerializer
-    lookup_field = 'category'
 
     def get_permissions(self):
-        if self.request.nethod == 'PUT':
-            return [IsCourseTeacherOrAdmin()]
-        if self.request.method == 'DELETE':
+        if self.request.method == 'PUT' or self.request.method == 'DELETE':
             return [IsCourseTeacherOrAdmin()]
         return [AllowAny()]
 
+class CourseByCategoryView(generics.ListAPIView):
+    serializer_class = CourseListSerializer
+    permission_classes = [AllowAny]
+    pagination_class = CategoryPagination
+
+    def get_queryset(self):
+        category_pk = self.kwargs['pk']
+        try:
+            return Course.objects.filter(category_id=category_pk)
+        except Category.DoesNotExist:
+            raise NotFound("Категория не найдена")

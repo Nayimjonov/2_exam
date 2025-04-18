@@ -10,3 +10,5 @@ class CategoryPagination(PageNumberPagination):
 class CoursePagination(PageNumberPagination):
     page_size = 10
 
+
+

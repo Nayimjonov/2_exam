@@ -17,7 +17,7 @@ class Category(BaseModel):
 class Course(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses')
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='courses')
     price = models.DecimalField(max_digits=8, decimal_places=2)
     discount_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)

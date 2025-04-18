@@ -99,7 +99,7 @@ class CourseListSerializer(BaseCourseSerializer):
 
 class CourseDetailSerializer(BaseCourseSerializer):
     modules = ModuleSerializer(many=True, read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
+    reviews = ReviewSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
     students_count = serializers.SerializerMethodField()
 
@@ -112,7 +112,7 @@ class CourseDetailSerializer(BaseCourseSerializer):
         return representation
 
     def get_average_rating(self, obj):
-        reviews = obj.review_set.all()
+        reviews = obj.reviews.all()
         if reviews.exists():
             total = sum(review.rating for review in reviews)
             return round(total / reviews.count(), 1)
