@@ -2,10 +2,10 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .permessions import IsTeacher, IsCourseTeacherOrAdmin
 from .models import Category, Course
-from .serializers import CategorySerializer, CourseListSerializer
+from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer
 from core.pagination import CategoryPagination, CoursePagination
 
-
+# CATEGORY
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -15,6 +15,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return [IsAdminUser()]
         return [AllowAny()]
+
 
 class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
@@ -27,6 +28,7 @@ class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             return [IsAdminUser()]
         return [AllowAny()]
 
+# COURSE
 class CourseListCreateView(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseListSerializer
@@ -37,6 +39,9 @@ class CourseListCreateView(generics.ListCreateAPIView):
             return [IsTeacher()]
         return [AllowAny()]
 
+
+class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
 
 
 
