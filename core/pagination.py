@@ -6,3 +6,7 @@ class UserPagination(PageNumberPagination):
 
 class CategoryPagination(PageNumberPagination):
     page_size = 10
+
+class CoursePagination(PageNumberPagination):
+    page_size = 10
+
