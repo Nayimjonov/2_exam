@@ -28,7 +28,7 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'content', 'video_url', 'duration', 'order')
 
 
-class ModuleSerializer(serializers.ModelSerializer):
+class CourseModuleSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True)
 
     class Meta:
@@ -76,14 +76,14 @@ class BaseCourseSerializer(serializers.ModelSerializer):
 
 
 class CourseListSerializer(BaseCourseSerializer):
-    modules = ModuleSerializer(many=True, required=False)
+    modules = CourseModuleSerializer(many=True, required=False)
 
     class Meta(BaseCourseSerializer.Meta):
         fields = BaseCourseSerializer.Meta.fields + ('modules',)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['modules'] = ModuleSerializer(instance.modules.all(), many=True).data
+        representation['modules'] = ModulesCourseSerializer(instance.modules.all(), many=True).data
         return representation
 
     def create(self, validated_data):
@@ -98,7 +98,7 @@ class CourseListSerializer(BaseCourseSerializer):
 
 
 class CourseDetailSerializer(BaseCourseSerializer):
-    modules = ModuleSerializer(many=True, read_only=True)
+    modules = CourseModuleSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
     students_count = serializers.SerializerMethodField()
@@ -108,7 +108,7 @@ class CourseDetailSerializer(BaseCourseSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['modules'] = ModuleSerializer(instance.modules.all().order_by('order'), many=True).data
+        representation['modules'] = CourseModuleSerializer(instance.modules.all().order_by('order'), many=True).data
         return representation
 
     def get_average_rating(self, obj):
@@ -120,3 +120,24 @@ class CourseDetailSerializer(BaseCourseSerializer):
 
     def get_students_count(self, obj):
         return Enrollment.objects.filter(course=obj).count()
+
+
+class ModuleCourseSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+
+
+class ModulesSerializer(serializers.ModelSerializer):
+    course = ModuleCourseSerializer(read_only=True)
+
+    class Meta:
+        model = Module
+        fields = ('id', 'title', 'description', 'order', 'course', 'created_at')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.course:
+            representation['course'] = ModuleCourseSerializer(instance.course).data
+        return representation
+
+
