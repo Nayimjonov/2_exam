@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Category, Course
 
 
-class TeacherSerializer(serializers.Serializer):
+class CourseTeacherSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     username = serializers.CharField(read_only=True)
     first_name = serializers.CharField(read_only=True)
@@ -37,4 +37,5 @@ class CourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['category'] = CourseCategorySerializer(instance.category).data
+        representation['teacher'] = CourseTeacherSerializer(instance.teacher).data
         return representation
