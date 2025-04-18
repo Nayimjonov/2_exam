@@ -129,13 +129,23 @@ class ModuleCourseSerializer(serializers.Serializer):
 
 class ModuleSerializer(serializers.ModelSerializer):
     course = ModuleCourseSerializer(read_only=True)
+    lessons = LessonSerializer(many=True, required=False)
 
     class Meta:
         model = Module
-        fields = ('id', 'title', 'description', 'order', 'course', 'created_at')
+        fields = ('id', 'title', 'description', 'order', 'course', 'created_at', 'lessons')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.course:
             representation['course'] = ModuleCourseSerializer(instance.course).data
+        if 'lessons' in representation:
+            del representation['lessons']
         return representation
+
+    def create(self, validated_data):
+        lessons_data = validated_data.pop('lessons', [])
+        module = Module.objects.create(**validated_data)
+        for lesson_data in lessons_data:
+            Lesson.objects.create(module=module, **lesson_data)
+        return module

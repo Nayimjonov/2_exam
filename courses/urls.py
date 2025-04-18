@@ -9,4 +9,7 @@ urlpatterns = [
     path('courses/', views.CourseListCreateView.as_view(), name='course-list'),
     path('courses/<int:pk>/', views.CourseRetrieveUpdateDestroyView.as_view(), name='course-detail'),
     path('courses/category/<int:pk>/', views.CourseByCategoryView.as_view(), name='courses-by-category'),
+    # module
+    path('modules/', views.ModuleListCreateView.as_view(), name='module-list'),
+
 ]
