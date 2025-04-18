@@ -70,6 +70,6 @@ class ModuleListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            return [IsCourseTeacherOrAdmin]
-        return [IsAuthenticated]
+            return [IsCourseTeacherOrAdmin()]
+        return [IsAuthenticated()]
 

@@ -83,18 +83,20 @@ class CourseListSerializer(BaseCourseSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['modules'] = ModulesCourseSerializer(instance.modules.all(), many=True).data
+        representation['modules'] = CourseModuleSerializer(instance.modules.all(), many=True).data
         return representation
 
     def create(self, validated_data):
         modules_data = validated_data.pop('modules', [])
         course = Course.objects.create(**validated_data)
+
         for module_data in modules_data:
             lessons_data = module_data.pop('lessons', [])
             module = Module.objects.create(course=course, **module_data)
             for lesson_data in lessons_data:
                 Lesson.objects.create(module=module, **lesson_data)
         return course
+
 
 
 class CourseDetailSerializer(BaseCourseSerializer):
@@ -146,6 +148,8 @@ class ModuleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         lessons_data = validated_data.pop('lessons', [])
         module = Module.objects.create(**validated_data)
+
         for lesson_data in lessons_data:
             Lesson.objects.create(module=module, **lesson_data)
+
         return module
