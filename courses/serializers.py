@@ -51,9 +51,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'rating', 'comment', 'created_at')
 
 
-class CourseListSerializer(serializers.ModelSerializer):
-    modules = ModuleSerializer(many=True, required=False)
-
+class BaseCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
@@ -68,13 +66,23 @@ class CourseListSerializer(serializers.ModelSerializer):
             'is_published',
             'created_at',
             'updated_at',
-            'modules',
         )
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['category'] = CourseCategorySerializer(instance.category).data
         representation['teacher'] = CourseTeacherSerializer(instance.teacher).data
+        return representation
+
+
+class CourseListSerializer(BaseCourseSerializer):
+    modules = ModuleSerializer(many=True, required=False)
+
+    class Meta(BaseCourseSerializer.Meta):
+        fields = BaseCourseSerializer.Meta.fields + ('modules',)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
         representation['modules'] = ModuleSerializer(instance.modules.all(), many=True).data
         return representation
 
@@ -89,36 +97,17 @@ class CourseListSerializer(serializers.ModelSerializer):
         return course
 
 
-class CourseDetailSerializer(serializers.ModelSerializer):
+class CourseDetailSerializer(BaseCourseSerializer):
     modules = ModuleSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
     average_rating = serializers.SerializerMethodField()
     students_count = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Course
-        fields = (
-            'id',
-            'title',
-            'description',
-            'teacher',
-            'category',
-            'price',
-            'discount_price',
-            'image',
-            'is_published',
-            'created_at',
-            'updated_at',
-            'modules',
-            'reviews',
-            'average_rating',
-            'students_count',
-        )
+    class Meta(BaseCourseSerializer.Meta):
+        fields = BaseCourseSerializer.Meta.fields + ('modules', 'reviews', 'average_rating', 'students_count')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['category'] = CourseCategorySerializer(instance.category).data
-        representation['teacher'] = CourseTeacherSerializer(instance.teacher).data
         representation['modules'] = ModuleSerializer(instance.modules.all().order_by('order'), many=True).data
         return representation
 
