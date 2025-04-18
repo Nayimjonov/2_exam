@@ -1,8 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .permessions import IsTeacher, IsCourseTeacherOrAdmin
-from .models import Category, Course
-from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer
+from .models import Category, Course, Module, Lesson
+from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer, ModuleSerializer
 from core.pagination import CategoryPagination, CoursePagination
 from rest_framework.exceptions import NotFound
 
@@ -61,3 +61,8 @@ class CourseByCategoryView(generics.ListAPIView):
             return Course.objects.filter(category_id=category_pk)
         except Category.DoesNotExist:
             raise NotFound("Категория не найдена")
+
+#MODULE
+class ModuleListCreateView(generics.ListCreateAPIView):
+    queryset = Module
+    serializer_class = ModuleSerializer

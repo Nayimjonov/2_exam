@@ -127,7 +127,7 @@ class ModuleCourseSerializer(serializers.Serializer):
     title = serializers.CharField(read_only=True)
 
 
-class ModulesSerializer(serializers.ModelSerializer):
+class ModuleSerializer(serializers.ModelSerializer):
     course = ModuleCourseSerializer(read_only=True)
 
     class Meta:
@@ -139,5 +139,3 @@ class ModulesSerializer(serializers.ModelSerializer):
         if instance.course:
             representation['course'] = ModuleCourseSerializer(instance.course).data
         return representation
-
-
