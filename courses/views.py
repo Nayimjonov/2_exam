@@ -42,6 +42,13 @@ class CourseListCreateView(generics.ListCreateAPIView):
 
 class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
+    serializer_class = CourseDetailSerializer
+    lookup_field = 'category'
 
-
+    def get_permissions(self):
+        if self.request.nethod == 'PUT':
+            return [IsCourseTeacherOrAdmin()]
+        if self.request.method == 'DELETE':
+            return [IsCourseTeacherOrAdmin()]
+        return [AllowAny()]
 
