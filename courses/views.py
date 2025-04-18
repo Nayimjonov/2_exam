@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
+from .permessions import IsTeacher, IsCourseTeacherOrAdmin
 from .models import Category, Course
 from .serializers import CategorySerializer, CourseSerializer
 from core.pagination import CategoryPagination, CoursePagination
@@ -30,4 +31,12 @@ class CourseListCreateView(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CoursePagination
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsTeacher()]
+        return [AllowAny()]
+
+
+
 
