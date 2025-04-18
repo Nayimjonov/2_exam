@@ -25,3 +25,5 @@ class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == 'DELETE':
             return [IsAdminUser()]
         return [AllowAny()]
+
+class CourseListCreateView(generics.ListCreateAPIView):
