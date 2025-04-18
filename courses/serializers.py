@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Course
+from .models import Category, Course, Module, Lesson
 
 
 class CourseTeacherSerializer(serializers.Serializer):
@@ -17,7 +17,23 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'name', 'description', 'icon', 'created_at')
 
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ('id', 'title', 'content', 'video_url', 'duration', 'order')
+
+
+class ModuleSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True)
+
+    class Meta:
+        model = Module
+        fields = ('id', 'title', 'description', 'order', 'lessons')
+
 class CourseSerializer(serializers.ModelSerializer):
+    modules = ModuleSerializer(many=True, required=False)
+
     class Meta:
         model = Course
         fields = (
@@ -38,4 +54,15 @@ class CourseSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['category'] = CourseCategorySerializer(instance.category).data
         representation['teacher'] = CourseTeacherSerializer(instance.teacher).data
+        representation['modules'] = ModuleSerializer(instance.modules.all(), many=True).data
         return representation
+
+    def create(self, validated_data):
+        modules_data = validated_data.pop('modules', [])
+        course = Course.objects.create(**validated_data)
+        for module_data in modules_data:
+            lessons_data = module_data.pop('lessons', [])
+            module = Module.objects.create(course=course, **module_data)
+            for lesson_data in lessons_data:
+                Lesson.objects.create(module=module, **lesson_data)
+        return course
