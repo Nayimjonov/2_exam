@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializers import RegisterSerializer, UserSerializer
 from core.pagination import UserPagination
+from .permissions import IsOwnerOrAdminOrReadOnly
 
 
 
@@ -42,3 +43,4 @@ class UserListView(generics.ListAPIView):
 class UserRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
