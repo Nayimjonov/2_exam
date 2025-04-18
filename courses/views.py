@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
-from .models import Category
-from .serializers import CategorySerializer
+from .models import Category, Course
+from .serializers import CategorySerializer, CourseSerializer
 from core.pagination import CategoryPagination
 
 
@@ -27,3 +27,7 @@ class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         return [AllowAny()]
 
 class CourseListCreateView(generics.ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+
