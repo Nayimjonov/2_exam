@@ -15,7 +15,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
-            'is',
+            'id',
             'title',
             'description',
             'teacher',
@@ -27,3 +27,8 @@ class CourseSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['category'] = CourseCategorySerializer(instance.category).data
+        return representation
