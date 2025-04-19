@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from .permessions import IsTeacher, IsCourseTeacherOrAdmin
 from .models import Category, Course, Module, Lesson
-from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer, ModuleSerializer
+from .serializers import CategorySerializer, CourseListSerializer, CourseDetailSerializer, ModuleListSerializer
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination
 from rest_framework.exceptions import NotFound
 
@@ -63,13 +63,14 @@ class CourseByCategoryView(generics.ListAPIView):
             raise NotFound("Категория не найдена")
 
 #MODULE
-class ModuleListCreateView(generics.ListCreateAPIView):
+class ModuleListView(generics.ListAPIView):
     queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
+    serializer_class = ModuleListSerializer
     pagination_class = ModulePagination
 
     def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsCourseTeacherOrAdmin()]
-        return [IsAuthenticated()]
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return super().get_permissions()
+
 

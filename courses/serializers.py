@@ -98,7 +98,6 @@ class CourseListSerializer(BaseCourseSerializer):
         return course
 
 
-
 class CourseDetailSerializer(BaseCourseSerializer):
     modules = CourseModuleSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
@@ -129,27 +128,10 @@ class ModuleCourseSerializer(serializers.Serializer):
     title = serializers.CharField(read_only=True)
 
 
-class ModuleSerializer(serializers.ModelSerializer):
+class ModuleListSerializer(serializers.ModelSerializer):
     course = ModuleCourseSerializer(read_only=True)
-    lessons = LessonSerializer(many=True, required=False)
 
     class Meta:
         model = Module
-        fields = ('id', 'title', 'description', 'order', 'course', 'created_at', 'lessons')
+        fields = ('id', 'title', 'description', 'order', 'course', 'created_at')
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        if instance.course:
-            representation['course'] = ModuleCourseSerializer(instance.course).data
-        if 'lessons' in representation:
-            del representation['lessons']
-        return representation
-
-    def create(self, validated_data):
-        lessons_data = validated_data.pop('lessons', [])
-        module = Module.objects.create(**validated_data)
-
-        for lesson_data in lessons_data:
-            Lesson.objects.create(module=module, **lesson_data)
-
-        return module
