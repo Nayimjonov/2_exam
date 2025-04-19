@@ -28,7 +28,7 @@ class Course(BaseModel):
         return self.title
 
 class Module(BaseModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules', null=True, blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     order = models.PositiveIntegerField()

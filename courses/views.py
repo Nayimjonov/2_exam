@@ -82,3 +82,14 @@ class ModuleListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return [IsAuthenticated()]
         return [IsAuthenticated()]
+
+
+class ModuleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Module.objects.all()
+    serializer_class = ModuleCreateSerializer
+
+    def get_permissions(self):
+        if self.request.method == ['PUT', 'DELETE']:
+            return [IsCourseTeacherOrAdmin()]
+        return [AllowAny()]
+
