@@ -173,6 +173,17 @@ class ModuleByCourseListSerializer(serializers.Serializer):
     lessons_count = serializers.IntegerField(read_only=True)
 
 # LESSON
+class CourseSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+
+
+class LessonModuleDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    course = CourseSerializer(read_only=True)
+
+
 class LessonModuleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(read_only=True)
@@ -199,6 +210,25 @@ class LessonsSerializer(serializers.ModelSerializer):
         return representation
 
 
+class LessonDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = (
+            'id',
+            'title',
+            'content',
+            'video_url',
+            'duration',
+            'order',
+            'module',
+            'created_at',
+            'updated_at'
+        )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['module'] = LessonModuleDetailSerializer(instance.module).data
+        return representation
 
 
 

@@ -10,7 +10,7 @@ from .serializers import (
     CourseDetailSerializer,
     ModuleListSerializer,
     ModuleCreateSerializer,
-    ModuleDetailSerializer, ModuleByCourseListSerializer, LessonsSerializer,
+    ModuleDetailSerializer, ModuleByCourseListSerializer, LessonsSerializer, LessonDetailSerializer,
 )
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination, LessonPagination
 
@@ -115,6 +115,16 @@ class LessonListCreateView(generics.ListCreateAPIView):
     serializer_class = LessonsSerializer
     pagination_class = LessonPagination
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsCourseTeacherOrAdmin()]
+        return [IsAuthenticated()]
+
+
+class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonDetailSerializer
+    permission_classes = [IsAuthenticated]
 
 
 

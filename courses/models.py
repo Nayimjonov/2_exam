@@ -37,12 +37,12 @@ class Module(BaseModel):
         return f"{self.course.title} - {self.title}"
 
 class Lesson(BaseModel):
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lessons')
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lessons', null=True, blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     video_url = models.URLField(null=True, blank=True)
     duration = models.PositiveIntegerField(help_text="Duration in minutes")
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.module.title} - {self.title}"
