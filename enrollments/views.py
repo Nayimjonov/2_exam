@@ -10,3 +10,4 @@ class EnrollmentListCreateView(generics.ListCreateAPIView):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
     pagination_class = EnrollmentPagination
+
