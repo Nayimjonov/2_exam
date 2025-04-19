@@ -12,8 +12,7 @@ from .serializers import (
     ModuleCreateSerializer,
     ModuleDetailSerializer, ModuleByCourseListSerializer, LessonsSerializer,
 )
-from core.pagination import CategoryPagination, CoursePagination, ModulePagination
-
+from core.pagination import CategoryPagination, CoursePagination, ModulePagination, LessonPagination
 
 
 # CATEGORY
@@ -114,7 +113,7 @@ class ModuleByCourseListView(generics.ListAPIView):
 class LessonListCreateView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonsSerializer
-
+    pagination_class = LessonPagination
 
 
 

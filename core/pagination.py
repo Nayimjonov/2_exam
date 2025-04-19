@@ -13,4 +13,5 @@ class CoursePagination(PageNumberPagination):
 class ModulePagination(PageNumberPagination):
     page_size = 10
 
-
+class LessonPagination(PageNumberPagination):
+    page_size = 10
