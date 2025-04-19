@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from django.db.models import Count
+from rest_framework.exceptions import NotFound
 from .permessions import IsTeacher, IsCourseTeacherOrAdmin
 from .models import Category, Course, Module, Lesson
 from .serializers import (
@@ -8,11 +10,11 @@ from .serializers import (
     CourseDetailSerializer,
     ModuleListSerializer,
     ModuleCreateSerializer,
-    ModuleDetailSerializer,
-
+    ModuleDetailSerializer, ModuleByCourseListSerializer,
 )
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination
-from rest_framework.exceptions import NotFound
+
+
 
 # CATEGORY
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -93,5 +95,14 @@ class ModuleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         if self.request.method == ['PUT', 'DELETE']:
             return [IsCourseTeacherOrAdmin()]
-        return [AllowAny()]
+        return [IsAuthenticated()]
 
+
+class ModuleByCourseListView(generics.ListAPIView):
+    serializer_class = ModuleByCourseListSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['course_id']
+        return Module.objects.filter(course_id=course_id)\
+            .annotate(lessons_count=Count('lessons'))\
+            .order_by('order')

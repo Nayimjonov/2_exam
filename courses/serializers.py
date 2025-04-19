@@ -160,3 +160,11 @@ class ModuleCreateSerializer(serializers.ModelSerializer):
 class ModuleDetailSerializer(ModuleCreateSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
 
+
+class ModuleByCourseListSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
+    order = serializers.IntegerField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    lessons_count = serializers.IntegerField(read_only=True)
