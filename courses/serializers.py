@@ -155,3 +155,8 @@ class ModuleCreateSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['course'] = ModuleCourseSerializer(instance.course).data
         return representation
+
+
+class ModuleDetailSerializer(ModuleCreateSerializer):
+    lessons = LessonSerializer(many=True, read_only=True)
+

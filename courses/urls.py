@@ -11,5 +11,6 @@ urlpatterns = [
     path('courses/category/<int:pk>/', views.CourseByCategoryView.as_view(), name='courses-by-category'),
     # module
     path('modules/', views.ModuleListCreateView.as_view(), name='module-list'),
+    path('modules/<int:pk>/', views.ModuleRetrieveUpdateDestroyView.as_view(), name='module-detail'),
 
 ]

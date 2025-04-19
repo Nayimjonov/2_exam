@@ -7,7 +7,9 @@ from .serializers import (
     CourseListSerializer,
     CourseDetailSerializer,
     ModuleListSerializer,
-    ModuleCreateSerializer
+    ModuleCreateSerializer,
+    ModuleDetailSerializer,
+
 )
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination
 from rest_framework.exceptions import NotFound
@@ -86,7 +88,7 @@ class ModuleListCreateView(generics.ListCreateAPIView):
 
 class ModuleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Module.objects.all()
-    serializer_class = ModuleCreateSerializer
+    serializer_class = ModuleDetailSerializer
 
     def get_permissions(self):
         if self.request.method == ['PUT', 'DELETE']:
