@@ -1,3 +1,5 @@
+from sqlite3 import register_adapter
+
 from rest_framework import serializers
 from .models import Category, Course, Module, Lesson
 from enrollments.models import Enrollment
@@ -171,6 +173,11 @@ class ModuleByCourseListSerializer(serializers.Serializer):
     lessons_count = serializers.IntegerField(read_only=True)
 
 # LESSON
+class LessonModuleSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+
+
 class LessonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
@@ -186,6 +193,10 @@ class LessonsSerializer(serializers.ModelSerializer):
             'updated_at'
         )
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['module'] = LessonModuleSerializer(instance.module).data
+        return representation
 
 
 
