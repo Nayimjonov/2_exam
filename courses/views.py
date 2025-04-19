@@ -60,6 +60,7 @@ class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             return [IsCourseTeacherOrAdmin()]
         return [AllowAny()]
 
+
 class CourseByCategoryView(generics.ListAPIView):
     serializer_class = CourseListSerializer
     permission_classes = [AllowAny]
@@ -100,7 +101,8 @@ class ModuleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 class ModuleByCourseListView(generics.ListAPIView):
     serializer_class = ModuleByCourseListSerializer
-
+    pagination_class = CoursePagination
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         course_id = self.kwargs['course_id']
         return Module.objects.filter(course_id=course_id)\
