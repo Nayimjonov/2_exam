@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from django.db.models import Count
 from rest_framework.exceptions import NotFound
-from .permessions import IsTeacher, IsCourseTeacherOrAdmin
+from .permessions import IsTeacher, IsCourseTeacherOrAdmin, IsEnrolledOrTeacherOrAdmin
 from .models import Category, Course, Module, Lesson
 from .serializers import (
     CategorySerializer,
@@ -129,12 +129,13 @@ class LessonListCreateView(generics.ListCreateAPIView):
 class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonDetailSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsEnrolledOrTeacherOrAdmin]
 
 
 class LessonListByModuleAPIView(generics.ListAPIView):
     serializer_class = BaseLessonSerializer
     pagination_class = ModulePagination
+    permission_classes = [IsEnrolledOrTeacherOrAdmin]
 
     def get_queryset(self):
         module_id = self.kwargs['module_id']
