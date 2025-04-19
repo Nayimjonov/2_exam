@@ -15,6 +15,8 @@ class EnrollmentCourseSerializer(serializers.Serializer):
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
+    enrolled_at = serializers.DateTimeField(source='created_at', read_only=True)
+
     class Meta:
         model = Enrollment
         fields = ('id', 'user', 'course', 'enrolled_at', 'is_completed', 'completed_at')

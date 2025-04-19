@@ -1,6 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from courses.permessions import IsCourseTeacherOrAdmin
 from .models import Enrollment
 from .serializers import EnrollmentSerializer
@@ -11,10 +10,3 @@ class EnrollmentListCreateView(generics.ListCreateAPIView):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
     pagination_class = EnrollmentPagination
-
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsCourseTeacherOrAdmin()]
-        return [IsAuthenticated()]
-
-

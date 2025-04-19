@@ -5,7 +5,7 @@ from courses.models import Course, Lesson
 
 
 class Enrollment(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments', null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
