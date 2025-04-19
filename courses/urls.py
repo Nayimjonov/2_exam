@@ -13,5 +13,7 @@ urlpatterns = [
     path('modules/', views.ModuleListCreateView.as_view(), name='module-list'),
     path('modules/<int:pk>/', views.ModuleRetrieveUpdateDestroyView.as_view(), name='module-detail'),
     path('modules/course/<int:course_id>/', views.ModuleByCourseListView.as_view(), name='modules-by-course'),
+    # lesson
+    path('lessons/', views.LessonListCreateView.as_view(), name='lesson-list'),
 
 ]
