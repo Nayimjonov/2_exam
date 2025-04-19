@@ -10,7 +10,7 @@ from .serializers import (
     CourseDetailSerializer,
     ModuleListSerializer,
     ModuleCreateSerializer,
-    ModuleDetailSerializer, ModuleByCourseListSerializer,
+    ModuleDetailSerializer, ModuleByCourseListSerializer, LessonsSerializer,
 )
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination
 
@@ -108,3 +108,21 @@ class ModuleByCourseListView(generics.ListAPIView):
         return Module.objects.filter(course_id=course_id)\
             .annotate(lessons_count=Count('lessons'))\
             .order_by('order')
+
+
+# LESSON
+class LessonListCreateView(generics.ListCreateAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonsSerializer
+
+
+
+
+
+
+
+
+
+
+
+

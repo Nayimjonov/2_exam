@@ -3,7 +3,7 @@ from .models import Category, Course, Module, Lesson
 from enrollments.models import Enrollment
 from reviews.models import Review
 
-
+# CATEGORY
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -50,7 +50,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = ('id', 'user', 'rating', 'comment', 'created_at')
 
-
+# COURSE
 class BaseCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -122,7 +122,7 @@ class CourseDetailSerializer(BaseCourseSerializer):
     def get_students_count(self, obj):
         return Enrollment.objects.filter(course=obj).count()
 
-
+# MODULE
 class ModuleCourseSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(read_only=True)
@@ -134,6 +134,7 @@ class ModuleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('id', 'title', 'description', 'order', 'course', 'created_at')
+
 
 class ModuleCreateSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True)
@@ -168,3 +169,26 @@ class ModuleByCourseListSerializer(serializers.Serializer):
     order = serializers.IntegerField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     lessons_count = serializers.IntegerField(read_only=True)
+
+# LESSON
+class LessonsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = (
+            'id',
+            'title',
+            'content',
+            'video_url',
+            'duration',
+            'order',
+            'module',
+            'created_at',
+            'updated_at'
+        )
+
+
+
+
+
+
+
