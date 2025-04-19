@@ -10,7 +10,12 @@ from .serializers import (
     CourseDetailSerializer,
     ModuleListSerializer,
     ModuleCreateSerializer,
-    ModuleDetailSerializer, ModuleByCourseListSerializer, LessonsSerializer, LessonDetailSerializer,
+    ModuleDetailSerializer,
+    ModuleByCourseListSerializer,
+    LessonsSerializer,
+    LessonDetailSerializer,
+    BaseLessonSerializer,
+
 )
 from core.pagination import CategoryPagination, CoursePagination, ModulePagination, LessonPagination
 
@@ -127,6 +132,13 @@ class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
 
+class LessonListByModuleAPIView(generics.ListAPIView):
+    serializer_class = BaseLessonSerializer
+    pagination_class = ModulePagination
+
+    def get_queryset(self):
+        module_id = self.kwargs['module_id']
+        return Lesson.objects.filter(module_id=module_id).order_by('order')
 
 
 

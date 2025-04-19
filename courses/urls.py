@@ -16,5 +16,6 @@ urlpatterns = [
     # lesson
     path('lessons/', views.LessonListCreateView.as_view(), name='lesson-list'),
     path('lessons/<int:pk>/', views.LessonRetrieveUpdateDestroyView.as_view(), name='lesson-detail'),
+    path('lessons/module/<int:module_id>/', views.LessonListByModuleAPIView.as_view(), name='lessons-by-module'),
 
 ]
