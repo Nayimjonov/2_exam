@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from courses.permessions import IsEnrollmentOwner
+from .permessions import IsEnrollmentOwner, IsProgressOwner, IsProgressOwnerOrTeacherOrAdmin, IsEnrollmentOwnerOrTeacherOrAdmin
 from .models import Enrollment, Progress, Lesson
 from .serializers import EnrollmentSerializer, ProgressSerializer, ProgressDetailSerializer, ProgressByLessonSerializer
 from core.pagination import EnrollmentPagination, ProgressPagination, LessonPagination
@@ -30,12 +30,16 @@ class ProgressRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Progress.objects.all()
     serializer_class = ProgressDetailSerializer
 
-
+    def get_permissions(self):
+        if self.request.method == 'PUST':
+            return [IsProgressOwner()]
+        return [IsProgressOwnerOrTeacherOrAdmin()]
 
 
 class ProgressListView(generics.ListAPIView):
     serializer_class = ProgressByLessonSerializer
     pagination_class = LessonPagination
+    permission_classes = [IsEnrollmentOwnerOrTeacherOrAdmin]
 
     def get_queryset(self):
         enrollment_id = self.request.query_params.get('enrollment', None)
