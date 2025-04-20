@@ -74,7 +74,7 @@ class ModuleSerializer(serializers.Serializer):
     title = serializers.CharField()
 
 
-class ProgressByLessonSerializer(serializers.Serializer):
+class ProgressLessonSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
     module = ModuleSerializer()
@@ -89,7 +89,21 @@ class ProgressByEnrollmentSerializer(serializers.Serializer):
 class ProgressDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     enrollment = ProgressByEnrollmentSerializer()
-    lesson = ProgressByLessonSerializer()
+    lesson = ProgressLessonSerializer()
     is_completed = serializers.BooleanField()
     completed_at = serializers.DateTimeField()
 
+# PROGRESS BY LESSON
+class LessonWithModuleSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    module = ModuleSerializer(read_only=True)
+
+
+class ProgressByLessonSerializer(serializers.ModelSerializer):
+    lesson = LessonWithModuleSerializer(read_only=True)
+    completed_at = serializers.DateTimeField(read_only=True)
+
+    class Meta:
+        model = Progress
+        fields = ('id', 'lesson', 'is_completed', 'completed_at')
