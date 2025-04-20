@@ -13,8 +13,8 @@ class ReviewCourseSerializer(serializers.Serializer):
     title = serializers.CharField(read_only=True)
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = ReviewUserSerializer()
-    course = ReviewCourseSerializer()
+    user = ReviewUserSerializer(read_only=True)
+    course = ReviewCourseSerializer(read_only=True)
 
     class Meta:
         model = Review
