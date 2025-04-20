@@ -29,18 +29,18 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
 # PROGRESS
 class CourseSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
 
 
 class ProgressEnrollmentSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    course = CourseSerializer()
+    id = serializers.IntegerField(read_only=True)
+    course = CourseSerializer(read_only=True)
 
 
 class LessonSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
 
 
 class ProgressSerializer(serializers.ModelSerializer):
@@ -59,39 +59,39 @@ class ProgressSerializer(serializers.ModelSerializer):
 
 # DETAIL
 class UserSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    username = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    username = serializers.CharField(read_only=True)
 
 
 class EnrollmentByUserSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    user = UserSerializer()
-    course = CourseSerializer()
+    id = serializers.IntegerField(read_only=True)
+    user = UserSerializer(read_only=True)
+    course = CourseSerializer(read_only=True)
 
 
 class ModuleSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
 
 
 class ProgressLessonSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
-    module = ModuleSerializer()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    module = ModuleSerializer(read_only=True)
 
 
 class ProgressByEnrollmentSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    user = UserSerializer()
-    course = CourseSerializer()
+    id = serializers.IntegerField(read_only=True)
+    user = UserSerializer(read_only=True)
+    course = CourseSerializer(read_only=True)
 
 
 class ProgressDetailSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    enrollment = ProgressByEnrollmentSerializer()
-    lesson = ProgressLessonSerializer()
-    is_completed = serializers.BooleanField()
-    completed_at = serializers.DateTimeField()
+    id = serializers.IntegerField(read_only=True)
+    enrollment = ProgressByEnrollmentSerializer(read_only=True)
+    lesson = ProgressLessonSerializer(read_only=True)
+    is_completed = serializers.BooleanField(read_only=True)
+    completed_at = serializers.DateTimeField(read_only=True)
 
 # PROGRESS BY LESSON
 class LessonWithModuleSerializer(serializers.Serializer):
