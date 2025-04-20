@@ -21,6 +21,11 @@ class ProgressListCreateView(generics.ListCreateAPIView):
     serializer_class = ProgressSerializer
     pagination_class = ProgressPagination
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [()]
+
+
 
 class ProgressRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Progress.objects.all()

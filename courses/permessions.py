@@ -31,8 +31,19 @@ class IsEnrolledOrTeacherOrAdmin(BasePermission):
             course = obj.module.course
         elif hasattr(obj, 'lesson') and hasattr(obj.lesson, 'module') and hasattr(obj.lesson.module, 'course'):
             course = obj.lesson.module.course
-
         if course:
             return Enrollment.objects.filter(user=user, course=course).exists()
+        return False
+
+
+class IsEnrollmentOwner(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if hasattr(obj, 'user'):
+            return obj.user == request.user
+        elif hasattr(obj, 'enrollment'):
+            return obj.enrollment.user == request.user
 
         return False
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
