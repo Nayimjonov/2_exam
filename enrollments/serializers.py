@@ -30,6 +30,8 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
 
 # PROGRESS
+
+
 class CourseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
@@ -65,6 +67,7 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField()
 
 
+
 class EnrollmentByUserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     user = UserSerializer()
@@ -81,10 +84,14 @@ class ProgressByLessonSerializer(serializers.Serializer):
     title = serializers.CharField()
     module = ModuleSerializer()
 
+class ProgressByEnrollmentSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    user = UserSerializer()
+    course = CourseSerializer()
 
 class ProgressDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    enrollment = EnrollmentSerializer()
+    enrollment = ProgressByEnrollmentSerializer()
     lesson = LessonSerializer()
     is_completed = serializers.BooleanField()
     completed_at = serializers.DateTimeField()
