@@ -34,9 +34,11 @@ class CourseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
 
+
 class ProgressEnrollmentSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     course = CourseSerializer()
+
 
 class LessonSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -57,4 +59,32 @@ class ProgressSerializer(serializers.ModelSerializer):
         representation['completed_at'] = instance.completed_at.isoformat() if instance.completed_at else None
         return representation
 
+# DETAIL
+class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()
 
+
+class EnrollmentByUserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    user = UserSerializer()
+    course = CourseSerializer()
+
+
+class ModuleSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+
+
+class ProgressByLessonSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    module = ModuleSerializer()
+
+
+class ProgressDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    enrollment = EnrollmentSerializer()
+    lesson = LessonSerializer()
+    is_completed = serializers.BooleanField()
+    completed_at = serializers.DateTimeField()

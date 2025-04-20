@@ -18,3 +18,5 @@ class ProgressListCreateView(generics.ListCreateAPIView):
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
     pagination_class = ProgressPagination
+
+
