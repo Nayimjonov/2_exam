@@ -55,3 +55,15 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'course', 'rating', 'comment', 'created_at', 'updated_at')
 
 
+class UserReviewCourseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    image = serializers.URLField()
+
+class UserReviewSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    course = UserReviewCourseSerializer()
+    rating = serializers.IntegerField()
+    comment = serializers.CharField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
