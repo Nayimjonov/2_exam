@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Enrollment, Progress
 
-
 # ENROLLMENT
 class EnrollmentUserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -28,10 +27,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         representation['course'] = EnrollmentCourseSerializer(instance.course).data
         return representation
 
-
 # PROGRESS
-
-
 class CourseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
@@ -67,7 +63,6 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField()
 
 
-
 class EnrollmentByUserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     user = UserSerializer()
@@ -84,14 +79,17 @@ class ProgressByLessonSerializer(serializers.Serializer):
     title = serializers.CharField()
     module = ModuleSerializer()
 
+
 class ProgressByEnrollmentSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     user = UserSerializer()
     course = CourseSerializer()
 
+
 class ProgressDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     enrollment = ProgressByEnrollmentSerializer()
-    lesson = LessonSerializer()
+    lesson = ProgressByLessonSerializer()
     is_completed = serializers.BooleanField()
     completed_at = serializers.DateTimeField()
+
