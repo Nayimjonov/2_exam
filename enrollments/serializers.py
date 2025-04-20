@@ -107,3 +107,4 @@ class ProgressByLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Progress
         fields = ('id', 'lesson', 'is_completed', 'completed_at')
+
