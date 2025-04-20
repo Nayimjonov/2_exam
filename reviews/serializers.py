@@ -1,17 +1,18 @@
 from rest_framework import serializers
 from .models import Review
+from users.models import User
+from courses.models import Course
 
 
-class ReviewUserSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    username = serializers.CharField(read_only=True)
-    first_name = serializers.CharField(read_only=True)
-    last_name = serializers.CharField(read_only=True)
+class ReviewUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
 
 
 class ReviewCourseSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    title = serializers.CharField(read_only=True)
+    id = serializers.IntegerField()
+    title = serializers.CharField()
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -29,3 +30,28 @@ class ReviewSerializer(serializers.ModelSerializer):
         representation['user'] = ReviewUserSerializer(instance.user).data
         representation['course'] = ReviewCourseSerializer(instance.course).data
         return representation
+
+
+class CourseTeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
+
+
+class ReviewCourseFullSerializer(serializers.ModelSerializer):
+    teacher = CourseTeacherSerializer()
+
+    class Meta:
+        model = Course
+        fields = ('id', 'title', 'teacher')
+
+
+class ReviewDetailSerializer(serializers.ModelSerializer):
+    user = ReviewUserSerializer()
+    course = ReviewCourseFullSerializer()
+
+    class Meta:
+        model = Review
+        fields = ('id', 'user', 'course', 'rating', 'comment', 'created_at', 'updated_at')
+
+
