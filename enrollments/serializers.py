@@ -34,11 +34,9 @@ class CourseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
 
-
 class ProgressEnrollmentSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    course = serializers.IntegerField()  # Course ID
-
+    course = CourseSerializer()
 
 class LessonSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -58,3 +56,5 @@ class ProgressSerializer(serializers.ModelSerializer):
         representation['lesson'] = lesson_data
         representation['completed_at'] = instance.completed_at.isoformat() if instance.completed_at else None
         return representation
+
+
