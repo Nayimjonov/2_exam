@@ -21,3 +21,8 @@ class EnrollmentPagination(PageNumberPagination):
 
 class ProgressPagination(PageNumberPagination):
     page_size = 10
+
+class ReviewPagination(PageNumberPagination):
+    page_size = 10
+
+

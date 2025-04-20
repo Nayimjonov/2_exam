@@ -1,5 +1,3 @@
-from sqlite3 import register_adapter
-
 from rest_framework import serializers
 from .models import Category, Course, Module, Lesson
 from enrollments.models import Enrollment
